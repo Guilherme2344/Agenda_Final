@@ -3,7 +3,7 @@ from view import View
 
 class ManterServicoUI:
     def main():
-        st.header('Sistema de Agenda')
+        st.header('Sistema de Serviço')
         tab_1, tab_2, tab_3, tab_4 = st.tabs(['Listar', 'Inserir', 'Atualizar', 'Excluir'])
         with tab_1: View.servico_listar()
         with tab_2: View.servico_inserir()
