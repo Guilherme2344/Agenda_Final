@@ -1,3 +1,5 @@
+import json
+
 class Servico:
     def __init__(self, id, desc, valor, duracao):
         self.__id = id

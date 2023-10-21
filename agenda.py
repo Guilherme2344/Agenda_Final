@@ -1,3 +1,6 @@
+import json
+from datetime import datetime
+
 class Agenda:
     def __init__(self, id, data, confirm, idCliente, idServico):
         self.__id = id
@@ -37,7 +40,7 @@ class Agenda:
         return self.__idServico
     
     def to_json(self):
-        return { '__id' : self.__id, '__data': self.__data.strftime('%d/%m/%Y'), '__confirm': self.__confirm, '__idCliente' : self.__idCliente, '__idServico' : self.__idServico}
+        return { '__id' : self.__id, '__data': self.__data.strftime('%d/%m/%Y %H:%M'), '__confirm': self.__confirm, '__idCliente' : self.__idCliente, '__idServico' : self.__idServico}
 
     def __str__(self):
         return f'{self.__id}; {self.__data}; {self.__confirm}; {self.__idCliente}; {self.__idServico}'
@@ -72,7 +75,7 @@ class NAgenda:
     def atualizar(cls, obj):
         NAgenda.abrir()
         agenda = cls.listar_id(obj.get_id())
-        if servico is not None:
+        if agenda is not None:
             agenda.set_data(obj.get_data())
             agenda.set_confirm(obj.get_confirm())
             agenda.set_idCliente(obj.get_idCliente())
@@ -83,7 +86,7 @@ class NAgenda:
     def excluir(cls, obj):
         NAgenda.abrir()
         agenda = cls.listar_id(obj.get_id())
-        if servico is not None:
+        if agenda is not None:
             cls.__agendas.remove(agenda)
             NAgenda.salvar()
 
@@ -94,7 +97,7 @@ class NAgenda:
             with open('agendas.json', 'r') as arquivo:
                 a = json.load(arquivo)
                 for agenda in a:
-                    d = Agenda(agenda['__id'], datetime.strptime(agenda['__data'], '%d/%m/%Y'), agenda['__confirm'], agenda['__idCliente'], agenda['__idServico'])
+                    d = Agenda(agenda['__id'], datetime.strptime(agenda['__data'], '%d/%m/%Y %H:%M'), agenda['__confirm'], agenda['__idCliente'], agenda['__idServico'])
                     cls.__agendas.append(d)
         except FileNotFoundError:
             pass
