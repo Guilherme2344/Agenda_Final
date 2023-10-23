@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
-from cliente import Cliente, NCliente
-from servico import Servico, NServico
-from agenda import Agenda, NAgenda
+from models.cliente import Cliente, NCliente
+from models.servico import Servico, NServico
+from models.agenda import Agenda, NAgenda
 import time
 from datetime import datetime, timedelta
 

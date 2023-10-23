@@ -1,8 +1,8 @@
 import streamlit as st
-from manterclienteUI import ManterClienteUI
-from manterservicoUI import ManterServicoUI
-from manteragendaUI import ManterAgendaUI
-from abriragendaUI import AbrirAgendaDiaUI
+from templates.manterclienteUI import ManterClienteUI
+from templates.manterservicoUI import ManterServicoUI
+from templates.manteragendaUI import ManterAgendaUI
+from templates.abriragendaUI import AbrirAgendaDiaUI
 
 class IndexUI:
     def sidebar():
