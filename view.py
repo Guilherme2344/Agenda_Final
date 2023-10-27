@@ -23,8 +23,9 @@ class View:
             nome = st.text_input('Nome')
             email = st.text_input('E-mail')
             fone = st.text_input('Fone')
+            senha = st.text_input('Senha')
             if st.form_submit_button('Inserir'):
-                cliente = Cliente(0, nome, email, fone)
+                cliente = Cliente(0, nome, email, fone, senha)
                 NCliente.inserir(cliente)
                 st.success('Cliente inserido com sucesso!')
                 time.sleep(1.5)
@@ -41,8 +42,9 @@ class View:
             nome = st.text_input('Novo nome')
             email = st.text_input('Novo e-mail')
             fone = st.text_input('Novo fone')
+            senha = st.text_input('Nova senha')
             if st.form_submit_button('Atualizar'):
-                cliente = Cliente(opcao.get_id(), nome, email, fone)
+                cliente = Cliente(opcao.get_id(), nome, email, fone, senha)
                 NCliente.atualizar(cliente)
                 st.success('Cliente atualizado com sucesso!')
                 time.sleep(1.5)
@@ -57,7 +59,7 @@ class View:
         with st.form('excluir'):
             opcao = st.selectbox('Qual cliente você quer excluir?', (clientes), index=None, placeholder='Selecione o cliente')
             if st.form_submit_button('Excluir'):
-                cliente = Cliente(opcao.get_id(), '', '', '')
+                cliente = Cliente(opcao.get_id(), '', '', '', '')
                 NCliente.excluir(cliente)
                 st.success('Cliente excluído com sucesso!')
                 time.sleep(1.5)

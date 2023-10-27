@@ -1,11 +1,12 @@
 import json
 
 class Cliente:
-    def __init__(self, id, nome, email, fone):
+    def __init__(self, id, nome, email, fone, senha):
         self.__id = id
         self.__nome = nome
         self.__email = email
         self.__fone = fone
+        self.__senha = senha
 
     def set_id(self, id):
         self.__id = id
@@ -19,6 +20,9 @@ class Cliente:
     def set_fone(self, fone):
         self.__fone = fone
 
+    def set_senha(self, senha):
+        self.__senha = senha
+
     def get_id(self):
         return self.__id
 
@@ -30,6 +34,9 @@ class Cliente:
 
     def get_fone(self):
         return self.__fone
+    
+    def get_senha(self):
+        return self.__senha
 
     def __str__(self):
         return f'{self.__id}; {self.__nome}; {self.__email}; {self.__fone}'
@@ -42,9 +49,13 @@ class NCliente:
     def inserir(cls, obj):
         NCliente.abrir()
         id = 0
+        email = 0
         for cliente in cls.__clientes:
             if cliente.get_id() > id: id = cliente.get_id()
+        for i in cls.__clientes:
+            if i.get_email() == i.get_email(): email = i.get_email()
         obj.set_id(id + 1)
+        obj.set_email(email)
         cls.__clientes.append(obj)
         NCliente.salvar()
 
@@ -68,6 +79,7 @@ class NCliente:
             cliente.set_nome(obj.get_nome())
             cliente.set_email(obj.get_email())
             cliente.set_fone(obj.get_fone())
+            cliente.set_senha(obj.get_senha())
             NCliente.salvar()
 
     @classmethod
@@ -85,7 +97,7 @@ class NCliente:
             with open('clientes.json', 'r') as arquivo:
                 a = json.load(arquivo)
                 for cliente in a:
-                    c = Cliente(cliente['_Cliente__id'], cliente['_Cliente__nome'], cliente['_Cliente__email'], cliente['_Cliente__fone'])
+                    c = Cliente(cliente['_Cliente__id'], cliente['_Cliente__nome'], cliente['_Cliente__email'], cliente['_Cliente__fone'], cliente['_Cliente__senha'])
                     cls.__clientes.append(c)
         except FileNotFoundError:
             pass
