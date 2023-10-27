@@ -49,13 +49,12 @@ class NCliente:
     def inserir(cls, obj):
         NCliente.abrir()
         id = 0
-        email = 0
+        lista = []
+        for i in cls.__clientes:
+            lista.append(i.get_email())
         for cliente in cls.__clientes:
             if cliente.get_id() > id: id = cliente.get_id()
-        for i in cls.__clientes:
-            if i.get_email() == i.get_email(): email = i.get_email()
         obj.set_id(id + 1)
-        obj.set_email(email)
         cls.__clientes.append(obj)
         NCliente.salvar()
 

@@ -43,7 +43,7 @@ class Agenda:
         return { '__id' : self.__id, '__data': self.__data.strftime('%d/%m/%Y %H:%M'), '__confirm': self.__confirm, '__idCliente' : self.__idCliente, '__idServico' : self.__idServico}
 
     def __str__(self):
-        return f'{self.__id}; {self.__data}; {self.__confirm}; {self.__idCliente}; {self.__idServico}'
+        return f'{self.__id}; {self.__data}; {self.__idCliente}; {self.__idServico}'
 
 
 class NAgenda:

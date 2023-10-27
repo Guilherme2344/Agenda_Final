@@ -25,6 +25,11 @@ class View:
             fone = st.text_input('Fone')
             senha = st.text_input('Senha')
             if st.form_submit_button('Inserir'):
+                clientes = []
+                for cliente in NCliente.listar():
+                    clientes.append(cliente.get_email())
+                if email in clientes:
+                    raise ValueError()
                 cliente = Cliente(0, nome, email, fone, senha)
                 NCliente.inserir(cliente)
                 st.success('Cliente inserido com sucesso!')
@@ -44,6 +49,11 @@ class View:
             fone = st.text_input('Novo fone')
             senha = st.text_input('Nova senha')
             if st.form_submit_button('Atualizar'):
+                clientes = []
+                for cliente in NCliente.listar():
+                    clientes.append(cliente.get_email())
+                if email in clientes:
+                    raise ValueError()
                 cliente = Cliente(opcao.get_id(), nome, email, fone, senha)
                 NCliente.atualizar(cliente)
                 st.success('Cliente atualizado com sucesso!')
@@ -127,7 +137,7 @@ class View:
         st.header('Lista de Agendas')
         for agenda in NAgenda.listar():
             agendas.append([agenda.get_id(), agenda.get_data(), agenda.get_confirm(), agenda.get_idCliente(), agenda.get_idServico()])
-        dados = pd.DataFrame(agendas, columns=['ID', 'Data', 'Confirmado', 'ID_Cliente', 'ID_Serviço'])
+        dados = pd.DataFrame(agendas, columns=['ID', 'Data', 'Confirmado', 'Cliente', 'Serviço'])
         st.dataframe(dados, hide_index=True)
 
     @classmethod
@@ -142,10 +152,12 @@ class View:
         with st.form('inserir'):
             data = st.date_input('Data', format='DD/MM/YYYY')
             confirm = st.checkbox('Confirmado?', value=False)
+            if confirm == False: confirm = False
+            else: confirm = True
             idcliente = st.selectbox('Cliente', (clientes), index=None, placeholder='Selecione o cliente')
             idservico = st.selectbox('Serviço', (servicos), index=None, placeholder='Selecione o serviço')
             if st.form_submit_button('Inserir'):
-                agenda = Agenda(0, data, confirm, idcliente.get_id(), idservico.get_id())
+                agenda = Agenda(0, data, confirm, idcliente.get_nome(), idservico.get_desc())
                 NAgenda.inserir(agenda)
                 st.success('Agenda inserida com sucesso')
                 time.sleep(1.5)
@@ -170,7 +182,7 @@ class View:
             idcliente = st.selectbox('Novo cliente', (clientes), index=None, placeholder='Selecione o cliente')
             idservico = st.selectbox('Novo serviço', (servicos), index=None, placeholder='Selecione o serviço')
             if st.form_submit_button('Atualizar'):
-                agenda = Agenda(op.get_id(), data, confirm, idcliente.get_id(), idservico.get_id())
+                agenda = Agenda(op.get_id(), data, confirm, idcliente.get_nome(), idservico.get_desc())
                 NAgenda.atualizar(agenda)
                 st.success('Agenda atualizada com sucesso!')
                 time.sleep(1.5)
@@ -209,5 +221,25 @@ class View:
                     NAgenda.inserir(agenda)
                     tempo_init_format += timedelta(minutes=duracao_format.minute)
                 st.success('Horários inseridos com sucesso!')
+                time.sleep(1.5)
+                st.rerun()
+
+    @classmethod
+    def abrir_conta(cls):
+        st.header('Abrir Conta')
+        with st.form('abrir'):
+            nome = st.text_input('Nome')
+            email = st.text_input('E-mail')
+            fone = st.text_input('Fone')
+            senha = st.text_input('Senha')
+            if st.form_submit_button('Criar'):
+                clientes = []
+                for cliente in NCliente.listar():
+                    clientes.append(cliente.get_email())
+                if email in clientes:
+                    raise ValueError()
+                cliente = Cliente(0, nome, email, fone, senha)
+                NCliente.inserir(cliente)
+                st.success('Cliente inserido com sucesso!')
                 time.sleep(1.5)
                 st.rerun()
