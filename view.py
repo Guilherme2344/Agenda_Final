@@ -19,7 +19,7 @@ class View:
     @classmethod
     def cliente_inserir(cls):
         st.header('Inserir Cliente')
-        with st.form('inserir'):
+        with st.form('inserir', clear_on_submit = True):
             nome = st.text_input('Nome')
             email = st.text_input('E-mail')
             fone = st.text_input('Fone')
@@ -34,8 +34,6 @@ class View:
                     cliente = Cliente(0, nome, email, fone, senha)
                     NCliente.inserir(cliente)
                     st.success('Cliente inserido com sucesso!')
-                    time.sleep(1.5)
-                    st.rerun()
 
     @classmethod
     def cliente_atualizar(cls):
