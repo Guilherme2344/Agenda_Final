@@ -19,7 +19,7 @@ class View:
     @classmethod
     def cliente_inserir(cls):
         st.header('Inserir Cliente')
-        with st.form('inserir', clear_on_submit = True):
+        with st.form('inserir'):
             nome = st.text_input('Nome')
             email = st.text_input('E-mail')
             fone = st.text_input('Fone')
