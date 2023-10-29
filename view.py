@@ -29,12 +29,13 @@ class View:
                 for cliente in NCliente.listar():
                     clientes.append(cliente.get_email())
                 if email in clientes:
-                    raise ValueError()
-                cliente = Cliente(0, nome, email, fone, senha)
-                NCliente.inserir(cliente)
-                st.success('Cliente inserido com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
+                    st.error('E-mail já cadastrado')
+                else:
+                    cliente = Cliente(0, nome, email, fone, senha)
+                    NCliente.inserir(cliente)
+                    st.success('Cliente inserido com sucesso!')
+                    time.sleep(1.5)
+                    st.rerun()
 
     @classmethod
     def cliente_atualizar(cls):
@@ -53,12 +54,13 @@ class View:
                 for cliente in NCliente.listar():
                     clientes.append(cliente.get_email())
                 if email in clientes:
-                    raise ValueError()
-                cliente = Cliente(opcao.get_id(), nome, email, fone, senha)
-                NCliente.atualizar(cliente)
-                st.success('Cliente atualizado com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
+                    st.error('E-mail já cadastrado')
+                else:
+                    cliente = Cliente(opcao.get_id(), nome, email, fone, senha)
+                    NCliente.atualizar(cliente)
+                    st.success('Cliente atualizado com sucesso!')
+                    time.sleep(1.5)
+                    st.rerun()
 
     @classmethod
     def cliente_excluir(cls):
@@ -237,9 +239,10 @@ class View:
                 for cliente in NCliente.listar():
                     clientes.append(cliente.get_email())
                 if email in clientes:
-                    raise ValueError()
-                cliente = Cliente(0, nome, email, fone, senha)
-                NCliente.inserir(cliente)
-                st.success('Cliente inserido com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
+                    st.error('E-mail já cadastrado')
+                else:
+                    cliente = Cliente(0, nome, email, fone, senha)
+                    NCliente.inserir(cliente)
+                    st.success('Cliente inserido com sucesso!')
+                    time.sleep(1.5)
+                    st.rerun()
