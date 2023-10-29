@@ -30,6 +30,7 @@ class View:
                     clientes.append(cliente.get_email())
                 if email in clientes:
                     st.error('E-mail já cadastrado')
+                    st.rerun()
                 else:
                     cliente = Cliente(0, nome, email, fone, senha)
                     NCliente.inserir(cliente)
