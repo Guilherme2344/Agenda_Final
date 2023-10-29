@@ -35,7 +35,7 @@ class View:
                     NCliente.inserir(cliente)
                     st.success('Cliente inserido com sucesso!')
                     time.sleep(1.5)
-                    st.experimental_rerun()
+                    st.rerun()
 
     @classmethod
     def cliente_atualizar(cls):
