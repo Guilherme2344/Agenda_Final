@@ -30,11 +30,14 @@ class View:
                     clientes.append(cliente.get_email())
                 if email in clientes:
                     st.error('E-mail já cadastrado')
+                    time.sleep(1.5)
                     st.rerun()
                 else:
                     cliente = Cliente(0, nome, email, fone, senha)
                     NCliente.inserir(cliente)
                     st.success('Cliente inserido com sucesso!')
+                    time.sleep(1.5)
+                    st.rerun()
 
     @classmethod
     def cliente_atualizar(cls):
