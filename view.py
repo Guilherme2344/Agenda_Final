@@ -136,7 +136,7 @@ class View:
         lista = []
         hoje = datetime.today()
         for agenda in NAgenda.listar():
-            if agenda.get_data() - hoje == timedelta(days=0):
+            if agenda.get_data() == hoje and agenda.get_confirm() == False:
                 lista.append(agenda)
         return lista
 
