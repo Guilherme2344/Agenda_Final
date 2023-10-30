@@ -1,41 +1,36 @@
 import streamlit as st
 import pandas as pd
+from models.agenda import Agenda, NAgenda
 from models.cliente import Cliente, NCliente
 from models.servico import Servico, NServico
-from models.agenda import Agenda, NAgenda
 import time
 from datetime import datetime, timedelta
 
 class View:
     @classmethod
     def cliente_listar(cls):
-        clientes = []
         st.header('Lista de Clientes')
+        clientes = []
         for cliente in NCliente.listar():
             clientes.append([cliente.get_id(), cliente.get_nome(), cliente.get_email(), cliente.get_fone()])
-        dados = pd.DataFrame(clientes, columns=['Id', 'Nome', 'E-mail', 'Fone'])
-        st.dataframe(dados, hide_index=True)
+        if len(clientes) == 0:
+            st.write('Nenhum cliente cadastrado')
+        else:
+            dados = pd.DataFrame(clientes, columns=['Id', 'Nome', 'E-mail', 'Fone'])
+            st.dataframe(dados, hide_index=True)
 
     @classmethod
     def cliente_inserir(cls):
-        st.header('Inserir Cliente')
-        with st.form('inserir'):
+        st.header('Abrir Conta')
+        with st.form('abrir', clear_on_submit=True):
             nome = st.text_input('Nome')
             email = st.text_input('E-mail')
             fone = st.text_input('Fone')
             senha = st.text_input('Senha')
-            if st.form_submit_button('Inserir'):
-                clientes = []
-                for cliente in NCliente.listar():
-                    clientes.append(cliente.get_email())
-                if email in clientes:
-                    st.error('E-mail já cadastrado')
-                else:
-                    cliente = Cliente(0, nome, email, fone, senha)
-                    NCliente.inserir(cliente)
-                    st.success('Cliente inserido com sucesso!')
-                    time.sleep(1.5)
-                    st.rerun()
+            if st.form_submit_button('Criar'):
+                cliente = Cliente(0, nome, email, fone, senha)
+                NCliente.inserir(cliente)
+
 
     @classmethod
     def cliente_atualizar(cls):
@@ -43,24 +38,18 @@ class View:
         for cliente in NCliente.listar(): 
             clientes.append(cliente)
         st.header('Atualizar Cliente')
-        with st.form('atualizar'):
-            opcao = st.selectbox('Qual cliente você quer atualizar?', (clientes), index=None, placeholder='Selecione o cliente')
-            nome = st.text_input('Novo nome')
-            email = st.text_input('Novo e-mail')
-            fone = st.text_input('Novo fone')
-            senha = st.text_input('Nova senha')
-            if st.form_submit_button('Atualizar'):
-                clientes = []
-                for cliente in NCliente.listar():
-                    clientes.append(cliente.get_email())
-                if email in clientes:
-                    st.error('E-mail já cadastrado')
-                else:
+        if len(clientes) == 0:
+            st.write('Nenhum cliente cadastrado')
+        else:
+            with st.form('atualizar', clear_on_submit=True):
+                opcao = st.selectbox('Qual cliente você quer atualizar?', (clientes), index=None, placeholder='Selecione o cliente')
+                nome = st.text_input('Novo nome')
+                email = st.text_input('Novo e-mail')
+                fone = st.text_input('Novo fone')
+                senha = st.text_input('Nova senha')
+                if st.form_submit_button('Atualizar'):
                     cliente = Cliente(opcao.get_id(), nome, email, fone, senha)
                     NCliente.atualizar(cliente)
-                    st.success('Cliente atualizado com sucesso!')
-                    time.sleep(1.5)
-                    st.rerun()
 
     @classmethod
     def cliente_excluir(cls):
@@ -68,14 +57,31 @@ class View:
         for cliente in NCliente.listar(): 
             clientes.append(cliente)
         st.header('Excluir Cliente')
-        with st.form('excluir'):
-            opcao = st.selectbox('Qual cliente você quer excluir?', (clientes), index=None, placeholder='Selecione o cliente')
-            if st.form_submit_button('Excluir'):
-                cliente = Cliente(opcao.get_id(), '', '', '', '')
-                NCliente.excluir(cliente)
-                st.success('Cliente excluído com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
+        if len(clientes) == 0:
+            st.write('Nenhum cliente cadastrado')
+        else:
+            with st.form('excluir'):
+                opcao = st.selectbox('Qual cliente você quer excluir?', (clientes), index=None, placeholder='Selecione o cliente')
+                if st.form_submit_button('Excluir'):
+                    cliente = Cliente(opcao.get_id(), '', '', '', '')
+                    NCliente.excluir(cliente)
+
+    @classmethod
+    def cliente_login(cls):
+        st.header('Login')
+        with st.form('login', clear_on_submit=True):
+            email = st.text_input('E-mail')
+            senha = st.text_input('Senha')
+            if st.form_submit_button('Login'):
+                lista_1 = []
+                lista_2 = []
+                for cliente in NCliente.listar():
+                    lista_1.append(cliente.get_email())
+                    lista_2.append(cliente.get_senha())
+                if email in lista_1 and senha in lista_2:
+                    st.success('Login realizado com sucesso')
+                else:
+                    st.error('Usuário ou senha inválido(s)')
 
     @classmethod
     def servico_listar(cls):
@@ -96,9 +102,6 @@ class View:
             if st.form_submit_button('Inserir'):
                 servico = Servico(0, desc, valor, duracao)
                 NServico.inserir(servico)
-                st.success('Serviço inserido com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
 
     @classmethod
     def servico_atualizar(cls):
@@ -114,9 +117,6 @@ class View:
             if st.form_submit_button('Atualizar'):
                 servico = Servico(op.get_id(), desc, valor, duracao)
                 NServico.atualizar(servico)
-                st.success('Serviço atualizado com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
 
     @classmethod
     def servico_excluir(cls):
@@ -129,9 +129,16 @@ class View:
             if st.form_submit_button('Excluir'):
                 servico = Servico(op.get_id(), '', '', '')
                 NServico.excluir(servico)
-                st.success('Serviço excluído com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
+
+    @classmethod
+    def agenda_listar_hoje(cls):
+        st.header('Agenda de Hoje')
+        lista = []
+        hoje = datetime.today()
+        for agenda in NAgenda.listar():
+            if agenda.get_data() - hoje == timedelta(days=0):
+                lista.append(agenda)
+        return lista
 
     @classmethod
     def agenda_listar(cls):
@@ -161,9 +168,6 @@ class View:
             if st.form_submit_button('Inserir'):
                 agenda = Agenda(0, data, confirm, idcliente.get_nome(), idservico.get_desc())
                 NAgenda.inserir(agenda)
-                st.success('Agenda inserida com sucesso')
-                time.sleep(1.5)
-                st.rerun()
 
     @classmethod
     def agenda_atualizar(cls):
@@ -186,9 +190,6 @@ class View:
             if st.form_submit_button('Atualizar'):
                 agenda = Agenda(op.get_id(), data, confirm, idcliente.get_nome(), idservico.get_desc())
                 NAgenda.atualizar(agenda)
-                st.success('Agenda atualizada com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
 
     @classmethod
     def agenda_excluir(cls):
@@ -201,48 +202,3 @@ class View:
             if st.form_submit_button('Excluir'):
                 agenda = Agenda(op.get_id(), '', '', '', '')
                 NAgenda.excluir(agenda)
-                st.success('Agenda excluída com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
-
-    @classmethod
-    def agenda_abrir_dia(cls):
-        st.header('Abrir Agenda do Dia')
-        with st.form('abrir'):
-            data = st.date_input('Data', format='DD/MM/YYYY')
-            tempo_init = st.text_input('Primeiro horário')
-            tempo_end = st.text_input('Último horário')
-            duracao = st.text_input('Duração do Serviço')
-            if st.form_submit_button('Inserir Horários'):
-                tempo_init_format = datetime.strptime(tempo_init, '%H:%M')
-                tempo_final_format = datetime.strptime(tempo_end, '%H:%M')
-                duracao_format = datetime.strptime(duracao, '%M')
-                while tempo_init_format <= tempo_final_format:
-                    data_horario_format = datetime(data.year, data.month, data.day, tempo_init_format.hour, tempo_init_format.minute)
-                    agenda = Agenda(0, data_horario_format, 0, 0, 0)
-                    NAgenda.inserir(agenda)
-                    tempo_init_format += timedelta(minutes=duracao_format.minute)
-                st.success('Horários inseridos com sucesso!')
-                time.sleep(1.5)
-                st.rerun()
-
-    @classmethod
-    def abrir_conta(cls):
-        st.header('Abrir Conta')
-        with st.form('abrir'):
-            nome = st.text_input('Nome')
-            email = st.text_input('E-mail')
-            fone = st.text_input('Fone')
-            senha = st.text_input('Senha')
-            if st.form_submit_button('Criar'):
-                clientes = []
-                for cliente in NCliente.listar():
-                    clientes.append(cliente.get_email())
-                if email in clientes:
-                    st.error('E-mail já cadastrado')
-                else:
-                    cliente = Cliente(0, nome, email, fone, senha)
-                    NCliente.inserir(cliente)
-                    st.success('Cliente inserido com sucesso!')
-                    time.sleep(1.5)
-                    st.rerun()
