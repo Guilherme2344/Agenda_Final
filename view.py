@@ -137,9 +137,10 @@ class View:
         hoje = datetime.today()
         for agenda in NAgenda.listar():
             if agenda.get_data() == hoje and agenda.get_confirm() == False:
-                lista.append(agenda)
-        return lista
-
+                lista.append([agenda.get_id(), agenda.get_data(), agenda.get_confirm(), agenda.get_idCliente(), agenda.get_idServico()])
+        dados = pd.DataFrame(agendas, columns=['ID', 'Data', 'Confirmado', 'Cliente', 'Serviço'])
+        st.dataframe(dados)
+        
     @classmethod
     def agenda_listar(cls):
         agendas = []
